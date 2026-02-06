@@ -1,30 +1,24 @@
----
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.middlewares: traefik-secured-header@kubernetescrd
-    traefik.ingress.kubernetes.io/router.tls: "true"
+  name: sample-ingress
+  namespace: default
   labels:
     app.kubernetes.io/name: sample-ingress
     app.kubernetes.io/instance: sample-ingress
     app.kubernetes.io/component: ingress
-  name: sample-ingress
-  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
-  ingressClassName: traefik
+  ingressClassName: nginx
   rules:
     - host: localhost
       http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: sample-service
                 port:
                   number: 8080
-            path: /
-            pathType: Prefix
-  # tls:
-  #   {{ create_ingress_spec_tls | indent( width=4) }}
