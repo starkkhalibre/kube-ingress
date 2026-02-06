@@ -1,0 +1,20 @@
+---
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: uat
+resources:
+  - ../../base
+nameSuffix: -uat
+labels:
+  - pairs:
+      env: uat
+      app.kubernetes.io/name: uat-ingress
+      app.kubernetes.io/instance: uat-ingress
+      app.kubernetes.io/component: ingress
+    includeSelectors: false
+patches:
+  - path: uat-ingress.yaml
+    target:
+      kind: Ingress
+      name: sample-ingress
